@@ -7,7 +7,7 @@ This is the main script that sets up the entire process, including loading datas
 To execute the main script, use the following command:
 
 ```bash
-cd code_question
+cd partI
 ```
 
 ```bash
