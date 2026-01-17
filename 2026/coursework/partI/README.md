@@ -4,7 +4,7 @@
 
 This is the main script that sets up the entire process, including loading datasets, model initialisation, and evaluation.
 
-To execute the main script, use the following command:
+To execute the main script (after installing the dependencies properly as in requirements.txt), use the following command:
 
 ```bash
 cd partI
