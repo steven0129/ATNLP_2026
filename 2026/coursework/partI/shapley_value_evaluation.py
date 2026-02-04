@@ -17,7 +17,9 @@ def get_included_steps(row, steps):
     ##############################################################################
     ###Question 4: INSERT CODE HERE: Get included steps as a tuple for each row.###
     ##############################################################################
-    raise NotImplementedError("Get included steps as a tuple for each row.")   
+    for s in steps:
+        if row[f"step{s}_present"] == 1:
+            included_steps.append(s)
     return tuple(sorted(included_steps))
 
 def generate_all_subsets(steps):
@@ -48,7 +50,13 @@ def compute_v_S(df, all_subsets_included):
     ##################################################################################
     ###Question 5: INSERT CODE HERE: Compute v(S) for all subsets of included steps.###
     ##################################################################################
-    raise NotImplementedError("Implement the code to compute v(S) for all subsets of included steps.")    
+    v_S = {}
+    for S in all_subsets_included:
+        subset_df = df[df['present_steps'] == S]
+        if len(subset_df) == 0:
+            v_S[S] = np.nan
+        else:
+            v_S[S] = subset_df['is_correct'].mean()
     return v_S
 
 def compute_marginal_contributions(steps, v_S):
@@ -75,7 +83,11 @@ def compute_marginal_contributions(steps, v_S):
             #############################################################################################
             ###Question 6: INSERT CODE HERE: Retrieve S_i, S_i_union_i, S_i_sorted, S_i_union_i_sorted###
             #############################################################################################
-            raise NotImplementedError("Implement the retrieval of S_i, S_i_union_i, and their sorted tuples.")
+            S_i = set(pi[:idx_i])
+            S_i_union_i = S_i.union({i})
+            included_S_i_sorted = tuple(sorted(S_i))
+            included_S_i_union_i_sorted = tuple(sorted(S_i_union_i))
+            
             v_S_i = v_S.get(included_S_i_sorted, np.nan)
             v_S_i_union_i = v_S.get(included_S_i_union_i_sorted, np.nan)
             if np.isnan(v_S_i) or np.isnan(v_S_i_union_i):
@@ -85,7 +97,8 @@ def compute_marginal_contributions(steps, v_S):
                 ###############################################################################
                 ###Question 6.1: INSERT CODE HERE: Compute the marginal contribution of step i###
                 ###############################################################################
-                raise NotImplementedError("Implement the computation of the marginal contribution of step i.")
+                marginal_contribution = v_S_i_union_i - v_S_i
+                Delta_sum[i] += marginal_contribution
         if valid_permutation:
             valid_permutations_count += 1
     return Delta_sum, valid_permutations_count
@@ -105,7 +118,7 @@ def compute_shapley_values(Delta_sum, valid_permutations_count, steps):
     ##############################################################
     ###Question 7: INSERT CODE HERE: Compute the Shapley values###
     ##############################################################
-    raise NotImplementedError("INSERT CODE HERE: Compute the Shapley values")
+    shapley_values = {i: Delta_sum[i] / valid_permutations_count for i in steps}
     return shapley_values
 
 def main():
