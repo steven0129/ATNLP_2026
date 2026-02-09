@@ -1,2 +1,4 @@
 **/__pycache__/*
 **/.env
+final_results/
+final_results*.zip
