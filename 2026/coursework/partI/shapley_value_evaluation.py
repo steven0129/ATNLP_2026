@@ -2,6 +2,13 @@ import pandas as pd
 import itertools
 import numpy as np
 
+
+### IMPORTANT NOTE: In the comments that include "Input" and "Output" you should consider mostly the *structure*
+### of the input and the output, rather than the specific inputs match to the output as you understand.
+### In some cases, the output is divorced from the input above, to not make filling in the function too easy.
+### Focus on the API through these comments, in the sense that, ensure that the input and the output of the functions is correct
+### (and of course, semantically correct according to your understanding).
+
 steps = [1, 2, 3, 4]
 
 def get_included_steps(row, steps):
@@ -81,7 +88,8 @@ def compute_marginal_contributions(steps, v_S):
         for i in steps:
             idx_i = pi.index(i)
             #############################################################################################
-            ###Question 6: INSERT CODE HERE: Retrieve S_i, S_i_union_i, S_i_sorted, S_i_union_i_sorted###
+            ###Question 6: INSERT CODE HERE: Retrieve S_i, S_i_union_i, S_i_sorted, included_S_i_sorted,
+            ### included_S_i_union_i_sorted
             #############################################################################################
             S_i = set(pi[:idx_i])
             S_i_union_i = S_i.union({i})
