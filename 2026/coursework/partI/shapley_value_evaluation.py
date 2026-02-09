@@ -135,8 +135,14 @@ def main():
     #############################################################
     # Question 7.3: INSERT CODE HERE: Compute the Shapley values#
     #############################################################
-    raise NotImplementedError("Implement the code to generate all possible subsets for the included steps.")
-    raise NotImplementedError("Implement the code to compute v(S).")
-    raise NotImplementedError("Implement the code to compute the Shapley values.")
+    # raise NotImplementedError("Implement the code to generate all possible subsets for the included steps.")
+    # raise NotImplementedError("Implement the code to compute v(S).")
+    # raise NotImplementedError("Implement the code to compute the Shapley values.")
+    all_subsets_included = generate_all_subsets(steps)
+    v_S = compute_v_S(df, all_subsets_included)
+    Delta_sum, valid_permutations_count = compute_marginal_contributions(steps, v_S)
+    shapley_values = compute_shapley_values(Delta_sum, valid_permutations_count, steps)
+    print(shapley_values)
+
 if __name__ == "__main__":
     main()
