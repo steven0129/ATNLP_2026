@@ -44,7 +44,7 @@ def predict_gpt(openai, messages):
         model="gpt-4o-mini",
         messages=messages,
         temperature=0.0,
-        max_tokens=200
+        max_tokens=2000
     )
 
     return response.choices[0].message.content
