@@ -25,9 +25,10 @@ def main():
     parser.add_argument("--method", choices=["comat"], required=True, help="Choose the method")
     parser.add_argument("--model", choices=["gpt"], required=True, help="Choose the model")
     parser.add_argument("--dataconfig", choices=["normal"], default="normal", help="Choose the data configuration")
+    parser.add_argument("--output-folder", type=str, default="final_results", help="Directory to save results")
     args = parser.parse_args()
 
-    output_dir = f"final_results/{args.dataset}/{args.method}/{args.model}"
+    output_dir = f"{args.output_folder}/{args.dataset}/{args.method}/{args.model}"
     output_file_path = f"{output_dir}/{args.method}_{args.model}_{args.dataconfig}.json"
     log_file_path = f"{output_dir}/{args.method}_{args.model}_{args.dataconfig}_log.txt"
 
