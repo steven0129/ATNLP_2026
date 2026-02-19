@@ -4,7 +4,7 @@ import json
 from tqdm import tqdm
 from utils import predict_gpt, model_evaluation
 
-def process_mmlu_redux_questions(dataset, output_file_path, formulation_prompt, model_type, model, tokenizer=None, device=None):
+def process_mmlu_redux_questions(dataset, output_file_path, formulation_prompt, model_type, model, tokenizer=None, device=None, top_p=0.8):
     results = []
     correct_count = 0
     total_count = 0
@@ -23,7 +23,7 @@ def process_mmlu_redux_questions(dataset, output_file_path, formulation_prompt, 
 
         formatted_options = "\n".join([f"{chr(65+i)}. {option}" for i, option in enumerate(options)])
 
-        model_result = model_evaluation(model_type, model, tokenizer, system_content, question, formatted_options, device)
+        model_result = model_evaluation(model_type, model, tokenizer, system_content, question, formatted_options, device, top_p=top_p)
 
         print(f"Model result: {model_result}")
 

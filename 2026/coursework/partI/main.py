@@ -26,6 +26,7 @@ def main():
     parser.add_argument("--model", choices=["gpt"], required=True, help="Choose the model")
     parser.add_argument("--dataconfig", choices=["normal"], default="normal", help="Choose the data configuration")
     parser.add_argument("--output-folder", type=str, default="final_results", help="Directory to save results")
+    parser.add_argument("--top-p", type=float, default=0.8, help="Top-p for OpenAI sampling")
     args = parser.parse_args()
 
     output_dir = f"{args.output_folder}/{args.dataset}/{args.method}/{args.model}"
@@ -64,7 +65,8 @@ def main():
             model_type=args.model,
             model=model,
             tokenizer=tokenizer,
-            device=device
+            device=device,
+            top_p=args.top_p
         )
     else:
         raise ValueError("Please select a valid data configuration")

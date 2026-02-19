@@ -15,7 +15,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 # raise NotImplementedError("Create a .env file with the api keys with the input OPENAI_API_KEY= before executing the code")
 client = openai.OpenAI()
 
-def predict_gpt(openai_m, messages):
+def predict_gpt(openai_m, messages, top_p=0.8):
     ######################################
     ###Question 2: INSERT THE CODE HERE###
     ######################################
@@ -43,20 +43,20 @@ def predict_gpt(openai_m, messages):
     response = openai.chat.completions.create(
         model="gpt-4o-mini",
         messages=messages,
-        temperature=0.0,
+        top_p=top_p,
         max_tokens=2000,
         seed=0
     )
 
     return response.choices[0].message.content
 
-def model_evaluation(model_type, model, tokenizer, system_content, question, formatted_options, device=None):
+def model_evaluation(model_type, model, tokenizer, system_content, question, formatted_options, device=None, top_p=0.8):
     if model_type == "gpt":
         messages = [
             {"role": "system", "content": system_content},
             {"role": "user", "content": f"Question: {question}\n\nOptions:\n{formatted_options}"}
         ]
-        model_result = predict_gpt(model, messages)
+        model_result = predict_gpt(model, messages, top_p=top_p)
     else: 
         raise ValueError(f"Unknown model_type: {model_type}")
 
