@@ -28,30 +28,6 @@ def format_reward_func(completions, **kwargs):
     ####################################################
     #### Implement your format reward function here ####
     ####################################################
-    def completion_to_text(completion):
-        if isinstance(completion, str):
-            return completion
-        if isinstance(completion, dict):
-            if "content" in completion:
-                return str(completion["content"])
-            return str(completion)
-        if isinstance(completion, (list, tuple)):
-            parts = []
-            for item in completion:
-                if isinstance(item, str):
-                    parts.append(item)
-                elif isinstance(item, dict) and "content" in item:
-                    parts.append(str(item["content"]))
-                else:
-                    parts.append(str(item))
-            return " ".join(parts)
-        return str(completion)
-
-    pattern = re.compile(r"\bthe answer is\b", re.IGNORECASE)
-    for completion in completions:
-        completion_text = completion_to_text(completion)
-        reward = 0.5 if pattern.search(completion_text) else 0.0
-        rewards.append(reward)
     return rewards
 
 def correctness_reward_func(prompts, completions, answer, **kwargs):
@@ -63,44 +39,6 @@ def correctness_reward_func(prompts, completions, answer, **kwargs):
     #########################################################
     #### Implement your correctness reward function here ####
     #########################################################
-    answer_values = answer
-    if not isinstance(answer_values, (list, tuple)):
-        answer_values = [answer_values] * len(completions)
-
-    def completion_to_text(completion):
-        if isinstance(completion, str):
-            return completion
-        if isinstance(completion, dict):
-            if "content" in completion:
-                return str(completion["content"])
-            return str(completion)
-        if isinstance(completion, (list, tuple)):
-            parts = []
-            for item in completion:
-                if isinstance(item, str):
-                    parts.append(item)
-                elif isinstance(item, dict) and "content" in item:
-                    parts.append(str(item["content"]))
-                else:
-                    parts.append(str(item))
-            return " ".join(parts)
-        return str(completion)
-
-    for completion, gold in zip(completions, answer_values):
-        completion_text = completion_to_text(completion)
-        match = re.search(r"the answer is\s*(-?\d+)", completion_text, re.IGNORECASE)
-        if match is None:
-            rewards.append(0.0)
-            continue
-
-        predicted = int(match.group(1))
-        try:
-            gold_value = int(gold)
-        except (TypeError, ValueError):
-            rewards.append(0.0)
-            continue
-
-        rewards.append(2.0 if predicted == gold_value else 0.0)
 
     return rewards
 
