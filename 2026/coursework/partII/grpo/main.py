@@ -43,7 +43,7 @@ def format_reward_func(completions, **kwargs):
     pattern = re.compile(r"The answer is[:\s]*([^\.\n]+)", re.IGNORECASE)
     for completion in completions:
         text = _extract_completion_text(completion)
-        rewards.append(1.0 if pattern.search(text.strip()) else 0.0)
+        rewards.append(0.5 if pattern.search(text.strip()) else 0.0)
     return rewards
 
 def correctness_reward_func(prompts, completions, answer, **kwargs):
@@ -61,7 +61,7 @@ def correctness_reward_func(prompts, completions, answer, **kwargs):
             continue
         predicted = match.group(1).replace(",", "")
         gold_clean = str(gold).strip().replace(",", "")
-        rewards.append(1.0 if predicted == gold_clean else 0.0)
+        rewards.append(2.0 if predicted == gold_clean else 0.0)
 
     return rewards
 
