@@ -14,7 +14,13 @@ def sft_formatting_prompts_func(tokenizer, example):
 
     formatted_answer = f"{reasoning}\n\nThe answer is {final_ans}"
 
-    instruction = "Think step by step before answering the question, and provide the final answer as 'the answer is [answer]' format." 
+    instruction = (
+        "Please think step by step before answering the question, and provide the final answer as 'the answer is [answer]' format. "
+        "These problems take between 2 and 8 steps to solve. "
+        "Solutions primarily involve performing a sequence of elementary calculations using basic arithmetic operations (+ − ×÷) to reach the final answer. "
+        "A bright middle school student should be able to solve every problem: from the paper, 'Problems require no concepts beyond the level of early Algebra, and the vast majority of problems can be solved without explicitly defining a variable.' "
+        "Solutions are provided in natural language, as opposed to pure math expressions."
+    )
 
     messages = [
         {"role": "system", "content": instruction},
