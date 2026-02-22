@@ -20,30 +20,14 @@ def set_seed(seed=42):
     torch.backends.cudnn.deterministic = True
     os.environ['PYTHONHASHSEED'] = str(seed)
 
-def _extract_completion_text(completion):
-    if isinstance(completion, str):
-        return completion
-    if isinstance(completion, dict):
-        return completion.get("content", "")
-    if isinstance(completion, (list, tuple)):
-        parts = []
-        for item in completion:
-            if isinstance(item, str):
-                parts.append(item)
-            elif isinstance(item, dict):
-                parts.append(item.get("content", ""))
-        return "".join(parts)
-    return ""
-
 def format_reward_func(completions, **kwargs):
     """
     Reward for adhering to the SFT format: "The answer is <number>"
     """
     rewards = []
-    pattern = re.compile(r"The answer is[:\s]*([^\.\n]+)", re.IGNORECASE)
-    for completion in completions:
-        text = _extract_completion_text(completion)
-        rewards.append(1.0 if pattern.search(text.strip()) else 0.0)
+    ####################################################
+    #### Implement your format reward function here ####
+    ####################################################
     return rewards
 
 def correctness_reward_func(prompts, completions, answer, **kwargs):
@@ -52,16 +36,9 @@ def correctness_reward_func(prompts, completions, answer, **kwargs):
     """
     rewards = []
     
-    pattern = re.compile(r"The answer is[:\s]*([^\.\n]+)", re.IGNORECASE)
-    for completion, gold in zip(completions, answer):
-        text = _extract_completion_text(completion)
-        match = pattern.search(text.strip())
-        if not match:
-            rewards.append(0.0)
-            continue
-        predicted = match.group(1).replace(",", "")
-        gold_clean = str(gold).strip().replace(",", "")
-        rewards.append(1.0 if predicted == gold_clean else 0.0)
+    #########################################################
+    #### Implement your correctness reward function here ####
+    #########################################################
 
     return rewards
 
