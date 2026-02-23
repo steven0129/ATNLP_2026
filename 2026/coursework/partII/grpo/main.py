@@ -142,7 +142,7 @@ def main():
 
     trainer = GRPOTrainer(
         model=model,
-        reward_funcs=[correctness_reward_func, format_reward_func],
+        reward_funcs=[correctness_reward_func],
         args=training_args,
         train_dataset=train_dataset,
         processing_class=tokenizer,
