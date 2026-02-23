@@ -53,7 +53,6 @@ def correctness_reward_func(prompts, completions, answer, **kwargs):
     rewards = []
     
     pattern = re.compile(r"The answer is[:\s]*([^\.\n]+)", re.IGNORECASE)
-    boxed_pattern = re.compile(r"\\boxed\{[^}]+\}")
     for completion, gold in zip(completions, answer):
         text = _extract_completion_text(completion)
         match = pattern.search(text.strip())
@@ -62,10 +61,20 @@ def correctness_reward_func(prompts, completions, answer, **kwargs):
             continue
         predicted = match.group(1).replace(",", "")
         gold_clean = str(gold).strip().replace(",", "")
-        reward = 2.0 if predicted == gold_clean else 0.0
-        if boxed_pattern.search(text):
-            reward -= 0.5
-        rewards.append(reward)
+        rewards.append(2.0 if predicted == gold_clean else 0.0)
+
+    return rewards
+
+
+def boxed_penalty_reward_func(prompts, completions, answer, **kwargs):
+    """
+    Penalty for using boxed answer format.
+    """
+    rewards = []
+    boxed_pattern = re.compile(r"\\boxed\{[^}]+\}")
+    for completion in completions:
+        text = _extract_completion_text(completion)
+        rewards.append(-2 if boxed_pattern.search(text) else 0.0)
 
     return rewards
 
@@ -146,7 +155,7 @@ def main():
 
     trainer = GRPOTrainer(
         model=model,
-        reward_funcs=[correctness_reward_func],
+        reward_funcs=[correctness_reward_func, boxed_penalty_reward_func],
         args=training_args,
         train_dataset=train_dataset,
         processing_class=tokenizer,
