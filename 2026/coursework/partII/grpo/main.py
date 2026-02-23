@@ -53,6 +53,7 @@ def correctness_reward_func(prompts, completions, answer, **kwargs):
     rewards = []
     
     pattern = re.compile(r"The answer is[:\s]*([^\.\n]+)", re.IGNORECASE)
+    boxed_pattern = re.compile(r"\\boxed\{[^}]+\}")
     for completion, gold in zip(completions, answer):
         text = _extract_completion_text(completion)
         match = pattern.search(text.strip())
@@ -61,7 +62,10 @@ def correctness_reward_func(prompts, completions, answer, **kwargs):
             continue
         predicted = match.group(1).replace(",", "")
         gold_clean = str(gold).strip().replace(",", "")
-        rewards.append(2.0 if predicted == gold_clean else 0.0)
+        reward = 2.0 if predicted == gold_clean else 0.0
+        if boxed_pattern.search(text):
+            reward -= 0.5
+        rewards.append(reward)
 
     return rewards
 
